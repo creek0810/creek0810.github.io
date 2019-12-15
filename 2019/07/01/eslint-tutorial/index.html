@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="ESLint是什麼?ESLint是一套程式碼規範檢查工具(Linter)。 在團隊合作中，為了確保程式碼的品質及coding style，通常都會使用Linter類的工具來進行檢查。 如何將ESLint導入專案以下將示範如何在一個空專案導入ESLint。 如果已經有安裝過node.js可以跳過步驟1，已經使用npm對專案進行管理可以跳過步驟2。 1.安裝Node.js由於ESLint是使用npm(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESLint使用教學">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;07&#x2F;01&#x2F;eslint-tutorial&#x2F;index.html">
+<meta property="og:site_name" content="Creek">
+<meta property="og:description" content="ESLint是什麼?ESLint是一套程式碼規範檢查工具(Linter)。 在團隊合作中，為了確保程式碼的品質及coding style，通常都會使用Linter類的工具來進行檢查。 如何將ESLint導入專案以下將示範如何在一個空專案導入ESLint。 如果已經有安裝過node.js可以跳過步驟1，已經使用npm對專案進行管理可以跳過步驟2。 1.安裝Node.js由於ESLint是使用npm(">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;B8BoH6i.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;H3OeAAC.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;JkWsiod.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;Eg9Ay9p.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;dXT98Y7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;HAsUHZv.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;lU3VOY2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;NznPgsp.png">
+<meta property="article:published_time" content="2019-07-01T11:56:18.000Z">
+<meta property="article:modified_time" content="2019-12-15T11:56:52.956Z">
+<meta property="article:author" content="Shin Yu Wang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;B8BoH6i.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/07/01/eslint-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>ESLint使用教學 | Creek</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Creek</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-tw">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/01/eslint-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shin Yu Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Creek">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESLint使用教學
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-01 19:56:18" itemprop="dateCreated datePublished" datetime="2019-07-01T19:56:18+08:00">2019-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-15 19:56:52" itemprop="dateModified" datetime="2019-12-15T19:56:52+08:00">2019-12-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="ESLint是什麼"><a href="#ESLint是什麼" class="headerlink" title="ESLint是什麼?"></a>ESLint是什麼?</h2><p>ESLint是一套程式碼規範檢查工具(Linter)。</p>
+<p>在團隊合作中，為了確保程式碼的品質及coding style，通常都會使用Linter類的工具來進行檢查。</p>
+<h2 id="如何將ESLint導入專案"><a href="#如何將ESLint導入專案" class="headerlink" title="如何將ESLint導入專案"></a>如何將ESLint導入專案</h2><p>以下將示範如何在一個空專案導入ESLint。</p>
+<p>如果已經有安裝過node.js可以跳過步驟1，已經使用npm對專案進行管理可以跳過步驟2。</p>
+<h3 id="1-安裝Node-js"><a href="#1-安裝Node-js" class="headerlink" title="1.安裝Node.js"></a>1.安裝Node.js</h3><p>由於ESLint是使用npm(Node.js的套件管理系統)管理的，所以我們需要先下載Node.js。</p>
+<p>我們可以先到<a href="https://nodejs.org/en/" target="_blank" rel="noopener">這個網址</a>進行下載，並安裝。</p>
+<h3 id="2-使用npm對我們的專案進行管理"><a href="#2-使用npm對我們的專案進行管理" class="headerlink" title="2.使用npm對我們的專案進行管理"></a>2.使用npm對我們的專案進行管理</h3><p>開啟cmd，並將路徑切換到專案資料夾(示範裡的專案資料夾位在桌面的eslint demo資料夾)<br><img src="https://i.imgur.com/B8BoH6i.png" alt=""><br><img src="https://i.imgur.com/H3OeAAC.png" alt=""></p>
+<p>輸入以下指令</p>
+<blockquote>
+<p>npm init</p>
+</blockquote>
+<p>在init的過程中，會要求我們輸入關於這個專案的一些資料，這裡我只修改了description跟author的部分<br><img src="https://i.imgur.com/JkWsiod.png" alt=""></p>
+<h3 id="3-下載ESLint"><a href="#3-下載ESLint" class="headerlink" title="3.下載ESLint"></a>3.下載ESLint</h3><p>在cmd輸入以下指令。</p>
+<blockquote>
+<p>npm install eslint -g</p>
+</blockquote>
+<p><img src="https://i.imgur.com/Eg9Ay9p.png" alt=""></p>
+<p>這裡我使用的是全局下載，之後如果其他專案也需要使用ESLint時，只需要重複步驟4即可，無須重複安裝eslint。</p>
+<p>如果不想使用全局下載，可以使用以下指令，下載到目前的專案環境。(記得路徑要切換到專案目錄下)</p>
+<blockquote>
+<p>npm install eslint –save-dev</p>
+</blockquote>
+<h3 id="4-對專案進行ESLint設定"><a href="#4-對專案進行ESLint設定" class="headerlink" title="4.對專案進行ESLint設定"></a>4.對專案進行ESLint設定</h3><p>在專案目錄下，輸入以下指令。</p>
+<blockquote>
+<p>eslint –init</p>
+</blockquote>
+<p>然後會詢問我們關於ESLint的設定</p>
+<p>詢問我們希望ESLint做的事情，這裡我選擇第三個。幫我們檢查syntax、找到問題，並強制coding style。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? How would you like to use ESLint?</span><br><span class="line">  To check syntax only</span><br><span class="line">  To check syntax and find problems</span><br><span class="line">&gt; To check syntax, find problems, and enforce code style</span><br></pre></td></tr></table></figure>
+
+<p>詢問我們使用到的module</p>
+<ul>
+<li>Javascript modules: 有使用ES6以上的語法，或是經過bable轉譯</li>
+<li>CommonJS: 沒有使用到babel但會使用到require或是expors的語法</li>
+<li>None of these: 其餘的</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? What type of modules does your project use?</span><br><span class="line">&gt; JavaScript modules (import&#x2F;export)</span><br><span class="line">  CommonJS (require&#x2F;exports)</span><br><span class="line">  None of these</span><br></pre></td></tr></table></figure>
+
+<p>詢問使用到的framework</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? Which framework does your project use?</span><br><span class="line">  React</span><br><span class="line">  Vue.js</span><br><span class="line">&gt; None of these</span><br></pre></td></tr></table></figure>
+
+<p>詢問此project使用到的地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">? Where does your code run? (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection)</span><br><span class="line">&gt;(*) Browser</span><br><span class="line"> ( ) Node</span><br></pre></td></tr></table></figure>
+
+<p>詢問使用的coding style<br>這裡我使用popular style guide，之後可以選擇想要使用的coding style</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? How would you like to define a style for your project? (Use arrow keys)</span><br><span class="line">&gt; Use a popular style guide</span><br><span class="line">  Answer questions about your style</span><br><span class="line">  Inspect your JavaScript file(s)</span><br></pre></td></tr></table></figure>
+
+<p>詢問要使用哪種coding style規範<br>這裡我選擇相較之下比較嚴格的Airbnb，另外也有standard跟Google的規範可以選擇</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? Which style guide do you want to follow? (Use arrow keys)</span><br><span class="line">&gt; Airbnb (https:&#x2F;&#x2F;github.com&#x2F;airbnb&#x2F;javascript)</span><br><span class="line">  Standard (https:&#x2F;&#x2F;github.com&#x2F;standard&#x2F;standard)</span><br><span class="line">  Google (https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;eslint-config-google)</span><br></pre></td></tr></table></figure>
+
+<p>選擇config檔案的格式<br>三者沒什麼差異，我選擇比較常用的JSON</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? What format do you want your config file to be in?</span><br><span class="line">  JavaScript</span><br><span class="line">  YAML</span><br><span class="line">&gt; JSON</span><br></pre></td></tr></table></figure>
+
+<p>最後如果有要求補安裝其他的東西，輸入Yes安裝上即完成設定<br><img src="https://i.imgur.com/dXT98Y7.png" alt=""></p>
+<h2 id="搭配編輯器使用ESLint"><a href="#搭配編輯器使用ESLint" class="headerlink" title="搭配編輯器使用ESLint"></a>搭配編輯器使用ESLint</h2><p>為了方便操作，我們可以在編輯器安裝ESLint的pulgin，這樣就可以即時知道程式碼哪邊有問題，或是不符合coding style的地方，而不用每次都要額外執行指令來檢查。</p>
+<p>以下將以vs code進行示範。</p>
+<p>首先，我們現在vs code安裝ESLint的plugin<br><img src="https://i.imgur.com/HAsUHZv.png" alt=""></p>
+<p>安裝完成後，新建一個測試的檔案，寫幾行程式碼。<br>可以發現ESLint提醒我們，要把測試用的console.log拿掉，並且根據Airbnb的coding style提醒我們要使用單引號，而非雙引號。<br><img src="https://i.imgur.com/lU3VOY2.png" alt=""></p>
+<p><img src="https://i.imgur.com/NznPgsp.png" alt=""></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/04/github-flow-tutorial/" rel="next" title="Github flow之介紹與實作">
+      Github flow之介紹與實作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint是什麼"><span class="nav-number">1.</span> <span class="nav-text">ESLint是什麼?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何將ESLint導入專案"><span class="nav-number">2.</span> <span class="nav-text">如何將ESLint導入專案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安裝Node-js"><span class="nav-number">2.1.</span> <span class="nav-text">1.安裝Node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-使用npm對我們的專案進行管理"><span class="nav-number">2.2.</span> <span class="nav-text">2.使用npm對我們的專案進行管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-下載ESLint"><span class="nav-number">2.3.</span> <span class="nav-text">3.下載ESLint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-對專案進行ESLint設定"><span class="nav-number">2.4.</span> <span class="nav-text">4.對專案進行ESLint設定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭配編輯器使用ESLint"><span class="nav-number">3.</span> <span class="nav-text">搭配編輯器使用ESLint</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shin Yu Wang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/creek0810" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;creek0810" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:creek880810@gmail.com" title="E-Mail → mailto:creek880810@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shin Yu Wang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.1.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
